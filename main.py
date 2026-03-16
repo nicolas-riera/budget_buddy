@@ -1,4 +1,4 @@
-from src.BBApp import *
+from src.BBApp import BBApp
 
 if __name__ == "__main__":
     app = BBApp()
