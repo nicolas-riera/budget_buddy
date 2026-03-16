@@ -2,4 +2,4 @@ from src.BBApp import BBApp
 
 if __name__ == "__main__":
     app = BBApp()
-    app.ctk.mainloop()
+    app.mainloop()

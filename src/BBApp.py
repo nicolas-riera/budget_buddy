@@ -1,8 +1,8 @@
 import customtkinter as ctk
 
-class BBApp:
+class BBApp(ctk.CTk):
     def __init__(self):
-        self.ctk = ctk.CTk()
+        super().__init__()
 
-        self.ctk.title("Budget Buddy")
-        self.ctk.geometry("1280x720")
+        self.title("Budget Buddy")
+        self.geometry("1280x720")
