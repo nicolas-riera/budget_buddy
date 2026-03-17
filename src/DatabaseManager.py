@@ -3,7 +3,16 @@ import os
 import dotenv
 
 class DatabaseManager: 
-    def __init__(self):
+        
+    def request(self):
+        self.connect_db()
+
+        self.cursor.execute("SHOW TABLES")
+        print(self.cursor.fetchall())
+        
+        self.close_db()
+
+    def connect_db(self):
         dotenv.load_dotenv()
         self.db_connect = mysql.connector.connect(
             host = os.getenv("DB_HOST"),
@@ -11,11 +20,8 @@ class DatabaseManager:
             password = os.getenv("DB_PASSWORD"),
             db = os.getenv("DB_NAME")
         )
-
         self.cursor = self.db_connect.cursor()
-    def request(self):
-        self.cursor.execute("SHOW TABLES")
-        print(self.cursor.fetchall())
+
 
     def close_db(self):
         self.cursor.close()
@@ -23,4 +29,6 @@ class DatabaseManager:
 
 
 db = DatabaseManager()
+db.request()
+
 db.request()
