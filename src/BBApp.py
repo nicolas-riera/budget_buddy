@@ -1,6 +1,6 @@
 import customtkinter as ctk
 
-from src.gui.background import background
+from src.gui.landing_page import landing_page
 
 class BBApp(ctk.CTk):
     def __init__(self):
@@ -9,5 +9,11 @@ class BBApp(ctk.CTk):
         self.title("Budget Buddy")
         self.geometry("1280x720")
         ctk.set_appearance_mode("dark")
+        self.configure(fg_color="#93807C") 
 
-        background(self)
+        landing_page(self)
+
+        
+
+
+    
