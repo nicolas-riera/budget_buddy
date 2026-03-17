@@ -56,6 +56,7 @@ CREATE TABLE `transactions` (
   `amount` float NOT NULL,
   `type` varchar(255) NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_account` (`id_account`),
   CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`id_account`) REFERENCES `account` (`id`)
@@ -106,4 +107,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-03-16 10:23:53
+-- Dump completed on 2026-03-17  9:11:54
