@@ -3,6 +3,7 @@ import customtkinter as ctk
 from src.gui.landing_page import landing_page
 from src.gui.login.login_page import login_page
 from src.gui.login.register_page import register_page
+from src.gui.menu.menu_page import menu_page
 
 class BBApp(ctk.CTk):
     def __init__(self):
@@ -13,7 +14,8 @@ class BBApp(ctk.CTk):
         ctk.set_appearance_mode("dark")
         self.configure(fg_color="#93807C") 
 
-        landing_page(self)
+        #landing_page(self)
+        menu_page(self)
 
     def clear_frame(self):
         for widget in self.winfo_children():
@@ -26,7 +28,8 @@ class BBApp(ctk.CTk):
         pages = {
             "landing": landing_page,
             "login": login_page,
-            "register": register_page
+            "register": register_page,
+            "menu" : menu_page
         }
 
         pages[page_name](self)
