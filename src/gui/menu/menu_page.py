@@ -1,33 +1,78 @@
+from src.gui.color_palette import *
 import customtkinter as ctk
+from customtkinter import CTkFont
 
 def menu_page(root):
 
-    title = ctk.CTkLabel(root, text="BUDGET BUDDY", font=("Arial", 36))
+    title = ctk.CTkLabel(root, text="BUDGET BUDDY", font=("Arial", 36), text_color=COLOR_TEXT_LIGHT)
     title.place(relx=0.5, rely=0.1, anchor='center')
 
+    # ── Colors ────────────────────────────────────────────────────────────
+    ACTIVE_FONT  = CTkFont(family="Arial", size=28, underline=True)
+    NORMAL_FONT  = CTkFont(family="Arial", size=28, underline=False)
+
+    # ── Nav frame ──────────────────────────────────────────────────
     nav_frame = ctk.CTkFrame(root, fg_color="transparent")
-    nav_frame.place(relx=0.22, rely=0.55, anchor="center")
+    nav_frame.place(relx=0.15, rely=0.55, anchor="center")
 
-    nav_frame.grid_columnconfigure((0, 1), weight=1, uniform="nav")
-    nav_frame.grid_rowconfigure((0, 1), weight=1, uniform="nav")
+    # ── Content frame ──────────────────────────────────────────────
+    content_frame = ctk.CTkFrame(root, width=850, height=450, corner_radius=16, fg_color=COLOR_SECTION, border_width=2, border_color=COLOR_TEXT_LIGHT)
+    content_frame.place(relx=0.62, rely=0.55, anchor="center")
+    content_frame.pack_propagate(False)
 
-    HOVER_COLOR = "#AAAAAA"
-    TEXT_COLOR  = "white"
+    content_label = ctk.CTkLabel(
+        content_frame,
+        text="Select a category",
+        font=("Arial", 20),
+        text_color=COLOR_TEXT_LIGHT,
+        
+    )
+    content_label.pack(expand=True)
 
-    def add_hover(btn):
-        btn.bind("<Enter>", lambda e: btn.configure(text_color=HOVER_COLOR))
-        btn.bind("<Leave>", lambda e: btn.configure(text_color=TEXT_COLOR))
+    # ── Sections ─────────────────────────────────────────────────
+    sections = {
+        "General":      "Budget overview\n\n• Total balance\n• Monthly summary\n• Alerts",
+        "History":      "Transaction history\n\n• All past transactions\n• Date filters",
+        "Transactions": "Manage transactions\n\n• Add / Edit / Delete\n• Categorization",
+        "Accounts":     "My accounts\n\n• Checking account\n• Savings\n• Balances",
+        "Settings":     "Settings\n\n• User profile\n• Currency\n• Notifications",
+    }
 
-    btn1 = ctk.CTkButton(nav_frame, text="General", fg_color="transparent", hover=False, width=150, height=80, font=("Arial", 24), text_color=TEXT_COLOR)
-    btn1.grid(row=0, column=0, padx=5, pady=0)
-    btn2 = ctk.CTkButton(nav_frame, text="History", fg_color="transparent", hover=False, width=150, height=80, font=("Arial", 24), text_color=TEXT_COLOR)
-    btn2.grid(row=1, column=0, padx=5, pady=0)
-    btn3 = ctk.CTkButton(nav_frame, text="Transactions", fg_color="transparent", hover=False, width=150, height=80, font=("Arial", 24), text_color=TEXT_COLOR)
-    btn3.grid(row=2, column=0, padx=5, pady=0)
-    btn4 = ctk.CTkButton(nav_frame, text="Accounts", fg_color="transparent", hover=False, width=150, height=80, font=("Arial", 24), text_color=TEXT_COLOR)
-    btn4.grid(row=3, column=0, padx=5, pady=0)
-    btn5 = ctk.CTkButton(nav_frame, text="Settings", fg_color="transparent", hover=False, width=150, height=80, font=("Arial", 24), text_color=TEXT_COLOR)
-    btn5.grid(row=4, column=0, padx=5, pady=0)
+    current_btn = {"ref": None}
 
-    for btn in [btn1, btn2, btn3, btn4, btn5]:
-        add_hover(btn)
+    def select(btn, name):
+        # Reset button
+        if current_btn["ref"] is not None:
+            current_btn["ref"].configure(font=NORMAL_FONT, text_color=COLOR_TEXT_LIGHT)
+        # Active Button
+        btn.configure(font=ACTIVE_FONT, text_color=COLOR_TEXT_LIGHT)
+        current_btn["ref"] = btn
+        # Update
+        content_label.configure(text=sections[name], text_color=COLOR_TEXT_LIGHT)
+
+    def make_btn(name, row):
+        btn = ctk.CTkButton(
+            nav_frame,
+            text=name,
+            fg_color="transparent",
+            hover=False,
+            width=180,
+            height=60,
+            font=NORMAL_FONT,
+            text_color=COLOR_TEXT_LIGHT,
+            anchor="center",
+        )
+        btn.configure(command=lambda b=btn, n=name: select(b, n))
+        btn.bind("<Enter>", lambda e, b=btn: b.configure(text_color=COLOR_HOVER) if current_btn["ref"] is not b else None)
+        btn.bind("<Leave>", lambda e, b=btn: b.configure(text_color=COLOR_TEXT_LIGHT)  if current_btn["ref"] is not b else None)
+        btn.grid(row=row, column=0, padx=5, pady=12, sticky="w")
+        return btn
+
+    btn1 = make_btn("General",      0)
+    btn2 = make_btn("History",      1)
+    btn3 = make_btn("Transactions", 2)
+    btn4 = make_btn("Accounts",     3)
+    btn5 = make_btn("Settings",     4)
+
+    # Select by default
+    select(btn1, "General")
