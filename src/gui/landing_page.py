@@ -1,11 +1,6 @@
 import customtkinter as ctk
 
-from src.gui.login_page import login_page
-from src.gui.clear_frame import clear_frame
-
 def landing_page(root):
-
-    clear_frame(root)
 
     title = ctk.CTkLabel(root, text="BUDGET BUDDY", font=("Arial", 65))
     title.place(relx=0.5, rely=0.2, anchor='center')
@@ -21,7 +16,7 @@ def landing_page(root):
         hover_color="#756865",
         width=250,
         height=70,
-        command=lambda:login_page(root)
+        command=lambda: root.show_page("login")
     )
     login_button.pack(pady=(0, 40))  
 
@@ -33,5 +28,6 @@ def landing_page(root):
         hover_color="#756865",
         width=250,
         height=70,
+        command=lambda:root.show_page("register")
     )
     register_button.pack()

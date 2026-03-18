@@ -1,11 +1,8 @@
 import customtkinter as ctk
-from src.gui.clear_frame import clear_frame
 
-def login_page(root):
+def register_page(root):
 
-    clear_frame(root)
-
-    def handle_login():
+    def handle_register():
         email = email_entry.get()
         pwd = pwd_entry.get()
         # send that to hashing and database
@@ -65,13 +62,14 @@ def login_page(root):
         right_panel, text="Login", width=160, height=45,
         fg_color=color_button_bg, text_color=color_button_text,
         hover_color="#E5D6D5", font=("Arial", 16, "bold"), corner_radius=8,
-        command=handle_login()
+        command=handle_register()
     )
     login_btn.grid(row=5, column=0, pady=(0, 15))
 
     register_btn = ctk.CTkButton(
-        right_panel, text="Register", fg_color="transparent",
+        right_panel, text="Login", fg_color="transparent",
         text_color=color_text_light, hover_color=color_hover,
-        font=("Arial", 13, "underline")
+        font=("Arial", 13, "underline"),
+        command=lambda: root.show_page("login")
     )   
     register_btn.grid(row=7, column=0)
