@@ -1,5 +1,7 @@
 import customtkinter as ctk
 
+from src.gui.color_palette import BG_COLOR
+
 from src.gui.landing_page import landing_page
 from src.gui.login.login_page import login_page
 from src.gui.login.register_page import register_page
@@ -12,7 +14,7 @@ class BBApp(ctk.CTk):
         self.title("Budget Buddy")
         self.geometry("1280x720")
         ctk.set_appearance_mode("dark")
-        self.configure(fg_color="#93807C") 
+        self.configure(fg_color=BG_COLOR) 
 
         #landing_page(self)
         menu_page(self)
