@@ -24,9 +24,8 @@ def register_page(root):
         else:
             account_id = AuthManager.register_user(root, firstname, lastname, email, pwd)
             if account_id:
-                root.account_id = account_id
-                # show main page
-                print(account_id) # debug only
+                root.account_id = account_id[0][0]
+                root.show_page("menu")
 
     root.grid_columnconfigure(0, weight=1, uniform="group1")
     root.grid_columnconfigure(1, weight=1, uniform="group1")

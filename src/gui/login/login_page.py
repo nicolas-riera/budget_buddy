@@ -13,9 +13,8 @@ def login_page(root):
         account_id = AuthManager.login_user(root, email, pwd)
 
         if account_id:
-            root.account_id = account_id
-            # show main page
-            print(account_id) # debug only
+            root.account_id = account_id[0][0]
+            root.show_page("menu")
         else:
             print("Incorrect email or password") # debug only
             # todo: add "incorrect email or password" message if wrong
