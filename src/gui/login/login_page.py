@@ -1,6 +1,6 @@
 import customtkinter as ctk
 
-from src.gui.color_palette import *
+from src.gui.color_palette import COLOR_HOVER, COLOR_TEXT_LIGHT, COLOR_BUTTON_BG, COLOR_BUTTON_TEXT, COLOR_BG_LEFT, COLOR_BG_RIGHT, PLACEHOLDER_TEXT_COLOR
 
 def login_page(root):
 
@@ -40,7 +40,7 @@ def login_page(root):
     email_entry = ctk.CTkEntry(
         right_panel, width=320, height=45, fg_color="transparent",
         border_color=COLOR_TEXT_LIGHT, border_width=1, text_color="#FFFFFF",
-        placeholder_text="john.doe@mail.com", placeholder_text_color="#9C9290"
+        placeholder_text="john.doe@mail.com", placeholder_text_color=PLACEHOLDER_TEXT_COLOR
     )
     email_entry.grid(row=2, column=0, pady=(0, 20))
 
@@ -50,7 +50,7 @@ def login_page(root):
     pwd_entry = ctk.CTkEntry(
         right_panel, width=320, height=45, fg_color="transparent",
         border_color=COLOR_TEXT_LIGHT, border_width=1, text_color="#FFFFFF", show="*",
-        placeholder_text="********", placeholder_text_color="#9C9290"
+        placeholder_text="********", placeholder_text_color=PLACEHOLDER_TEXT_COLOR
     )
     pwd_entry.grid(row=4, column=0, pady=(0, 35))
 
