@@ -1,5 +1,7 @@
 import customtkinter as ctk
 
+from src.gui.color_palette import COLOR_BUTTON_LANDING, COLOR_HOVER
+
 def landing_page(root):
 
     title = ctk.CTkLabel(root, text="BUDGET BUDDY", font=("Arial", 65))
@@ -12,8 +14,8 @@ def landing_page(root):
         button_frame,
         text="LOGIN",
         font=("Arial", 20),
-        fg_color="#645552",
-        hover_color="#756865",
+        fg_color=COLOR_BUTTON_LANDING,
+        hover_color=COLOR_HOVER,
         width=250,
         height=70,
         command=lambda: root.show_page("login")
@@ -24,8 +26,8 @@ def landing_page(root):
         button_frame,
         text="REGISTER",
         font=("Arial", 20),
-        fg_color="#645552",
-        hover_color="#756865",
+        fg_color=COLOR_BUTTON_LANDING,
+        hover_color=COLOR_HOVER,
         width=250,
         height=70,
         command=lambda:root.show_page("register")

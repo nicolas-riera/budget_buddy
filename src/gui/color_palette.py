@@ -1,0 +1,15 @@
+# BBApp
+BG_COLOR = "#93807C"
+
+# landing_page
+COLOR_BUTTON_LANDING = "#645552"
+
+# landing_page, login_page, register_page
+COLOR_HOVER = "#756865"
+
+# login_page, register_page
+COLOR_TEXT_LIGHT = "#E8E2E1"
+COLOR_BUTTON_BG = "#F7EBEA"
+COLOR_BUTTON_TEXT = "#4A3F3D"
+COLOR_BG_LEFT = "#93807C"
+COLOR_BG_RIGHT = "#857471"
