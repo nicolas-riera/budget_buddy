@@ -1,5 +1,7 @@
 import customtkinter as ctk
 
+from src.AuthManager import AuthManager
+
 from src.gui.color_palette import COLOR_HOVER, COLOR_TEXT_LIGHT, COLOR_BUTTON_BG, COLOR_BUTTON_TEXT, COLOR_BG_LEFT, COLOR_BG_RIGHT, PLACEHOLDER_TEXT_COLOR
 
 def register_page(root):
@@ -10,9 +12,21 @@ def register_page(root):
         email = email_entry.get()
         pwd = pwd_entry.get()
         pwd_confirm = pwd_confirm_entry.get()
-
-        # todo add all checks : pwd == pwd_confirm ; email not exist, password security checks
-        # send that to hashing and database
+        
+        if pwd != pwd_confirm:
+            print("Password and Password confirm are not the same") # show message pwd and pwd_confirm not same
+        elif not AuthManager.check_password_strengh(pwd):
+            print("Password is not secure enough") # show message Password is not secure enough
+        elif not AuthManager.check_email_format(email):
+            print("Invalid email") # show message Invalid email
+        elif AuthManager.check_email_in_db(root, email):
+            print("Email is already in db") # show message Email is already used
+        else:
+            account_id = AuthManager.register_user(root, firstname, lastname, email, pwd)
+            if account_id:
+                root.account_id = account_id
+                # show main page
+                print(account_id) # debug only
 
     root.grid_columnconfigure(0, weight=1, uniform="group1")
     root.grid_columnconfigure(1, weight=1, uniform="group1")
@@ -92,7 +106,7 @@ def register_page(root):
         button_frame, text="Register", width=160, height=45,
         fg_color=COLOR_BUTTON_BG, text_color=COLOR_BUTTON_TEXT,
         hover_color="#E5D6D5", font=("Arial", 16, "bold"), corner_radius=8,
-        command=handle_register()
+        command=handle_register
     )
     register_btn.grid(row=0, column=1, pady=(0, 15))
 
