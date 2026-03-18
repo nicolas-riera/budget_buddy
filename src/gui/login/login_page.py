@@ -2,7 +2,7 @@ import customtkinter as ctk
 
 from src.AuthManager import AuthManager
 
-from src.gui.color_palette import COLOR_HOVER, COLOR_TEXT_LIGHT, COLOR_BUTTON_BG, COLOR_BUTTON_TEXT, COLOR_BG_LEFT, COLOR_BG_RIGHT, PLACEHOLDER_TEXT_COLOR
+from src.gui.color_palette import COLOR_HOVER, COLOR_TEXT_LIGHT, COLOR_BUTTON_BG, COLOR_BUTTON_TEXT, COLOR_BG_LEFT, COLOR_BG_RIGHT, PLACEHOLDER_TEXT_COLOR, COLOR_RED
 
 def login_page(root):
 
@@ -16,8 +16,7 @@ def login_page(root):
             root.account_id = account_id[0][0]
             root.show_page("menu")
         else:
-            print("Incorrect email or password") # debug only
-            # todo: add "incorrect email or password" message if wrong
+            error_label.configure(text="Incorrect Email or Password.")
 
     root.grid_columnconfigure(0, weight=1, uniform="group1")
     root.grid_columnconfigure(1, weight=1, uniform="group1")
@@ -78,3 +77,12 @@ def login_page(root):
         command=lambda: root.show_page("register")
     )   
     register_btn.grid(row=7, column=0)
+
+    error_label = ctk.CTkLabel(
+    right_panel,
+    text="",
+    text_color=COLOR_RED,
+    fg_color="transparent",
+    font=("Helvetica", 15, "bold")
+    )
+    error_label.grid(row=8, column=0, pady=(0, 0))
