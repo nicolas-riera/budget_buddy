@@ -2,6 +2,8 @@ import customtkinter as ctk
 
 from src.gui.color_palette import BG_COLOR
 
+from src.DatabaseManager import DatabaseManager
+
 from src.gui.landing_page import landing_page
 from src.gui.login.login_page import login_page
 from src.gui.login.register_page import register_page
@@ -15,7 +17,12 @@ class BBApp(ctk.CTk):
         ctk.set_appearance_mode("dark")
         self.configure(fg_color=BG_COLOR) 
 
-        landing_page(self)
+        self.account_id = None
+        self.database = DatabaseManager()
+        if not self.database.successful_connection:
+            pass # show "Unable to connect to Server" page
+        else:
+            landing_page(self)
 
     def clear_frame(self):
         for widget in self.winfo_children():

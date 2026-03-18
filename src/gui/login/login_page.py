@@ -1,5 +1,7 @@
 import customtkinter as ctk
 
+from src.AuthManager import AuthManager
+
 from src.gui.color_palette import COLOR_HOVER, COLOR_TEXT_LIGHT, COLOR_BUTTON_BG, COLOR_BUTTON_TEXT, COLOR_BG_LEFT, COLOR_BG_RIGHT, PLACEHOLDER_TEXT_COLOR
 
 def login_page(root):
@@ -7,8 +9,16 @@ def login_page(root):
     def handle_login():
         email = email_entry.get()
         pwd = pwd_entry.get()
-        # send that to hashing and database
-        # todo: add "incorrect email or password" message if wrong
+
+        account_id = AuthManager.login_user(root, email, pwd)
+
+        if account_id:
+            root.account_id = account_id
+            # show main page
+            print(account_id) # debug only
+        else:
+            print("Incorrect email or password") # debug only
+            # todo: add "incorrect email or password" message if wrong
 
     root.grid_columnconfigure(0, weight=1, uniform="group1")
     root.grid_columnconfigure(1, weight=1, uniform="group1")
