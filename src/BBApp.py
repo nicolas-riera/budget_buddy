@@ -7,6 +7,7 @@ from src.DatabaseManager import DatabaseManager
 from src.gui.landing_page import landing_page
 from src.gui.login.login_page import login_page
 from src.gui.login.register_page import register_page
+from src.gui.menu.menu_page import menu_page
 
 class BBApp(ctk.CTk):
     def __init__(self):
@@ -35,7 +36,8 @@ class BBApp(ctk.CTk):
         pages = {
             "landing": landing_page,
             "login": login_page,
-            "register": register_page
+            "register": register_page,
+            "menu" : menu_page
         }
 
         pages[page_name](self)
