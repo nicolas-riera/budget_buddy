@@ -54,7 +54,8 @@ def login_page(root):
 
     pwd_entry = ctk.CTkEntry(
         right_panel, width=320, height=45, fg_color="transparent",
-        border_color=color_text_light, border_width=1, text_color="#FFFFFF", show="*"
+        border_color=color_text_light, border_width=1, text_color="#FFFFFF", show="*",
+        placeholder_text="********", placeholder_text_color="#9C9290"
     )
     pwd_entry.grid(row=4, column=0, pady=(0, 35))
 
