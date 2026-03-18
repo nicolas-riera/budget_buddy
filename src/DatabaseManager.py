@@ -1,6 +1,7 @@
 import mysql.connector #import required module
 import os 
 import dotenv
+import bcrypt
 
 class DatabaseManager: 
 
@@ -32,6 +33,11 @@ class DatabaseManager:
     def get_user(self):
         rqst = "SELECT id_user FROM account WHERE id = %s" #%s is a placeholder
         return self.run_request(rqst, (0,))
+    
+    def hash_password(self, password):
+        hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        print(hashed)
+        return hashed
 
     def close_db(self):
         self.cursor.close()
