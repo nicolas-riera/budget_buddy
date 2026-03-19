@@ -4,6 +4,7 @@ from src.gui.color_palette import BG_COLOR
 
 from src.DatabaseManager import DatabaseManager
 
+from src.gui.server_connection_error import server_connection_error_page
 from src.gui.landing_page import landing_page
 from src.gui.login.login_page import login_page
 from src.gui.login.register_page import register_page
@@ -21,7 +22,7 @@ class BBApp(ctk.CTk):
         self.account_id = None
         self.database = DatabaseManager()
         if not self.database.successful_connection:
-            pass # show "Unable to connect to Server" page
+            server_connection_error_page(self)
         else:
             landing_page(self)
 
