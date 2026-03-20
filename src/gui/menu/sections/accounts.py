@@ -45,7 +45,7 @@ def render_accounts(root, frame):
             text_color_balance = COLOR_AMOUNT_GREEN
         else:
             text_color_balance = COLOR_AMOUNT_RED
-        ctk.CTkLabel(row_frame, text=acc[2], font=("Arial", 20, "bold"),
+        ctk.CTkLabel(row_frame, text=f"€ {acc[2]}", font=("Arial", 20, "bold"),
                      text_color=text_color_balance, anchor="e").pack(side="right", padx=20)
 
     # ── Footer Buttons ─────────────────────────────────────────────────────
