@@ -59,5 +59,9 @@ class AuthManager:
         hashed = AuthManager.hash_password(password)
         root.database.run_request("INSERT INTO users (firstname, lastname, email, password) VALUES (%s, %s, %s, %s)", (firstname, lastname, email, hashed))
         del hashed
-        return root.database.run_request("SELECT id FROM users WHERE email=%s", (email,))
+
+        id = root.database.run_request("SELECT id FROM users WHERE email=%s", (email,))
+        root.database.run_request("INSERT INTO account (id_user, balance, can_overdrawn) VALUES (%s, 0, 0)", (id,))
+
+        return id
         

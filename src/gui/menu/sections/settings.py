@@ -1,7 +1,8 @@
 import customtkinter as ctk
+
 from src.gui.color_palette import *
 
-def render_settings(frame, mock_user):
+def render_settings(root, frame, mock_user):
     for widget in frame.winfo_children():
         widget.destroy()
 

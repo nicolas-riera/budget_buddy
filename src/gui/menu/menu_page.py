@@ -1,8 +1,8 @@
 from src.gui.color_palette import *
 import customtkinter as ctk
 from customtkinter import CTkFont
-from src.gui.menu.sections.sections import SECTIONS
 
+from src.gui.menu.sections.sections import SECTIONS
 
 def menu_page(root):
 
@@ -32,7 +32,7 @@ def menu_page(root):
         f.place(relx=0.62, rely=0.55, anchor="center")
         f.pack_propagate(False)
         f.grid_propagate(False)
-        render_func(f)
+        render_func(root, f)
         section_frames[section_name] = f
 
     # ── Section selection ──────────────────────────────────────────────────

@@ -1,7 +1,8 @@
 import customtkinter as ctk
+
 from src.gui.color_palette import *
 
-def render_history(frame, transactions):
+def render_history(root, frame, transactions):
     for widget in frame.winfo_children():
         widget.destroy()
 

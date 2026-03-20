@@ -1,8 +1,9 @@
 import customtkinter as ctk
 import tkinter as tk
+
 from src.gui.color_palette import *
 
-def render_general(frame, balance, account_name, account_id, all_transactions):
+def render_general(root, frame, balance, account_name, account_id, all_transactions):
     for widget in frame.winfo_children():
         widget.destroy()
 

@@ -5,12 +5,12 @@ from src.gui.menu.sections.accounts import render_accounts
 from src.gui.menu.sections.settings import render_settings
 
 # ── CENTRALIZED MOCK DATA (To be replaced by backend) ──────────────────────
+MOCK_ACCOUNT_ID = "1"
 MOCK_BALANCE = "€ 4,820.50"
 MOCK_ACCOUNT_NAME = "Personnal"
-MOCK_ACCOUNT_ID = "1"
 
 MOCK_TRANSACTIONS = [
-    ("Grocery store",    "-€ 52.30",  "#FF9E9E", "03/19/2026"),
+    ("Grocery store",    "-€ 52.30", "#FF9E9E", "03/19/2026"),
     ("Salary",           "+€ 2,100.00", "#C8F0C0", "03/18/2026"),
     ("Netflix",          "-€ 15.99",  "#FF9E9E", "03/17/2026"),
     ("Freelance invoice","+€ 50.00",  "#C8F0C0", "03/17/2026"),
@@ -42,10 +42,10 @@ MOCK_USER = {
 # ── ROUTING ────────────────────────────────────────────────────────────────
 SECTIONS = {
     # general computes the graph internally so we pass the full transaction list
-    "General":      lambda frame: render_general(frame, MOCK_BALANCE, MOCK_ACCOUNT_NAME, MOCK_ACCOUNT_ID, MOCK_TRANSACTIONS),
+    "General":      lambda root, frame: render_general(root, frame, MOCK_BALANCE, MOCK_ACCOUNT_NAME, MOCK_ACCOUNT_ID, MOCK_TRANSACTIONS),
     # history gets the entire list of transactions
-    "History":      lambda frame: render_history(frame, MOCK_TRANSACTIONS),
+    "History":      lambda root, frame: render_history(root, frame, MOCK_TRANSACTIONS),
     "Transactions": render_transactions,
-    "Accounts":     lambda frame: render_accounts(frame, MOCK_ACCOUNTS),
-    "Settings":     lambda frame: render_settings(frame, MOCK_USER),
+    "Accounts":     lambda root, frame: render_accounts(root, frame, MOCK_ACCOUNTS),
+    "Settings":     lambda root, frame: render_settings(root, frame, MOCK_USER),
 }

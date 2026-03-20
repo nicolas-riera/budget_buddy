@@ -1,5 +1,3 @@
-import DatabaseManager
-
 class FinanceManager:
     @staticmethod
     def deposit(account_id, amount):
