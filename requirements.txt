@@ -1,3 +1,4 @@
 customtkinter
 dotenv
 mysql-connector-python
+bcrypt

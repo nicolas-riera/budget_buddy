@@ -1,18 +1,36 @@
 import customtkinter as ctk
 
-from src.gui.color_palette import COLOR_HOVER, COLOR_TEXT_LIGHT, COLOR_BUTTON_BG, COLOR_BUTTON_TEXT, COLOR_BG_LEFT, COLOR_BG_RIGHT, PLACEHOLDER_TEXT_COLOR
+from src.AuthManager import AuthManager
+
+from src.gui.color_palette import COLOR_HOVER, COLOR_TEXT_LIGHT, COLOR_BUTTON_BG, COLOR_BUTTON_TEXT, COLOR_BG_LEFT, COLOR_BG_RIGHT, PLACEHOLDER_TEXT_COLOR, COLOR_RED
 
 def register_page(root):
 
     def handle_register():
+
+        error_label.configure(text="")
+
         firstname = firstname_entry.get()
         lastname = lastname_entry.get()
         email = email_entry.get()
         pwd = pwd_entry.get()
         pwd_confirm = pwd_confirm_entry.get()
 
-        # todo add all checks : pwd == pwd_confirm ; email not exist, password security checks
-        # send that to hashing and database
+        if firstname == "" or lastname == "" or email == "" or pwd == "" or pwd_confirm == "":
+            error_label.configure(text="Please fill out all the informations.")
+        elif pwd != pwd_confirm:
+            error_label.configure(text="Passwords do not match.")
+        elif not AuthManager.check_password_strengh(pwd):
+            error_label.configure(text="Password is not secure enough.\nIt must contain at least 10 characters, one uppercase letter,\none lowercase letter one number and one special character.")
+        elif not AuthManager.check_email_format(email):
+            error_label.configure(text="Email is invalid.")
+        elif AuthManager.check_email_in_db(root, email):
+            error_label.configure(text="Email already exists, please use another one.")
+        else:
+            account_id = AuthManager.register_user(root, firstname, lastname, email, pwd)
+            if account_id:
+                root.account_id = account_id[0][0]
+                root.show_page("menu")
 
     root.grid_columnconfigure(0, weight=1, uniform="group1")
     root.grid_columnconfigure(1, weight=1, uniform="group1")
@@ -86,15 +104,15 @@ def register_page(root):
     pwd_confirm_entry.grid(row=9, column=0, pady=(0, 35))
 
     button_frame = ctk.CTkFrame(right_panel, fg_color="transparent")
-    button_frame.grid(row=10, column=0, pady=(0, 35))
+    button_frame.grid(row=10, column=0, pady=(0, 0))
 
     register_btn = ctk.CTkButton(
         button_frame, text="Register", width=160, height=45,
         fg_color=COLOR_BUTTON_BG, text_color=COLOR_BUTTON_TEXT,
         hover_color="#E5D6D5", font=("Arial", 16, "bold"), corner_radius=8,
-        command=handle_register()
+        command=handle_register
     )
-    register_btn.grid(row=0, column=1, pady=(0, 15))
+    register_btn.grid(row=0, column=1, pady=(0, 0))
 
     login_btn = ctk.CTkButton(
         button_frame, text="Login", fg_color="transparent",
@@ -103,3 +121,12 @@ def register_page(root):
         command=lambda: root.show_page("login")
     )   
     login_btn.grid(row=0, column=0)
+
+    error_label = ctk.CTkLabel(
+    right_panel,
+    text="",
+    text_color=COLOR_RED,
+    fg_color="transparent",
+    font=("Helvetica", 15, "bold")
+    )
+    error_label.grid(row=11, column=0, pady=(0, 0))
