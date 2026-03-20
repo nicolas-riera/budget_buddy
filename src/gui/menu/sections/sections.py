@@ -33,12 +33,6 @@ MOCK_ACCOUNTS = [
     {"number": "FR76 1122 3344 5566", "name": "Business Account",  "balance": "€ 8,450.00",  "date": "10/12/2025"}
 ]
 
-MOCK_USER = {
-    "name": "Jane Doe",
-    "email": "jane.doe@example.com",
-    "accounts_count": 3
-}
-
 # ── ROUTING ────────────────────────────────────────────────────────────────
 SECTIONS = {
     # general computes the graph internally so we pass the full transaction list
@@ -47,5 +41,5 @@ SECTIONS = {
     "History":      lambda root, frame: render_history(root, frame, MOCK_TRANSACTIONS),
     "Transactions": render_transactions,
     "Accounts":     lambda root, frame: render_accounts(root, frame, MOCK_ACCOUNTS),
-    "Settings":     lambda root, frame: render_settings(root, frame, MOCK_USER),
+    "Settings":     lambda root, frame: render_settings(root, frame),
 }
