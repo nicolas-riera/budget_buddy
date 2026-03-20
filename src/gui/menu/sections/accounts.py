@@ -1,8 +1,10 @@
 import customtkinter as ctk
+from datetime import datetime
 
 from src.gui.color_palette import *
+from src.FinanceManager import FinanceManager
 
-def render_accounts(root, frame, mock_accounts):
+def render_accounts(root, frame):
     for widget in frame.winfo_children():
         widget.destroy()
 
@@ -21,26 +23,30 @@ def render_accounts(root, frame, mock_accounts):
     scroll = ctk.CTkScrollableFrame(list_card, fg_color="transparent")
     scroll.pack(fill="both", expand=True, padx=15, pady=15)
 
-    for i, acc in enumerate(mock_accounts):
+    for enum, acc in enumerate(FinanceManager.get_user_accounts(root)):
         row_frame = ctk.CTkFrame(scroll, fg_color="#6E5B58", corner_radius=8, height=65)
         row_frame.pack(fill="x", pady=6)
         row_frame.pack_propagate(False)
         
         # Name
-        ctk.CTkLabel(row_frame, text=acc["name"], font=("Arial", 18, "bold"),
+        ctk.CTkLabel(row_frame, text=f"Account {enum + 1}", font=("Arial", 18, "bold"),
                      text_color=COLOR_TEXT_LIGHT, anchor="w").pack(side="left", padx=(15, 15))
         
         # Number
-        ctk.CTkLabel(row_frame, text=acc["number"], font=("Arial", 14),
+        ctk.CTkLabel(row_frame, text=f"N° {acc[0]}", font=("Arial", 14),
                      text_color="#C0B0AE", anchor="w").pack(side="left", padx=10)
         
         # Date
-        ctk.CTkLabel(row_frame, text=f"Opened: {acc['date']}", font=("Arial", 12),
+        ctk.CTkLabel(row_frame, text=f"Opened: {acc[3]}", font=("Arial", 12),
                      text_color="#C0B0AE").pack(side="left", padx=10)
                      
         # Balance
-        ctk.CTkLabel(row_frame, text=acc["balance"], font=("Arial", 20, "bold"),
-                     text_color="#C8F0C0", anchor="e").pack(side="right", padx=20)
+        if acc[2] > 0:
+            text_color_balance = COLOR_AMOUNT_GREEN
+        else:
+            text_color_balance = COLOR_AMOUNT_RED
+        ctk.CTkLabel(row_frame, text=acc[2], font=("Arial", 20, "bold"),
+                     text_color=text_color_balance, anchor="e").pack(side="right", padx=20)
 
     # ── Footer Buttons ─────────────────────────────────────────────────────
     footer_frame = ctk.CTkFrame(frame, fg_color="transparent")

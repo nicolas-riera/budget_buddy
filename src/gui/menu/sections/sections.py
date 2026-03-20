@@ -27,14 +27,6 @@ MOCK_TRANSACTIONS = [
     ("Spotify",          "-€ 10.99",  "#FF9E9E", "02/13/2026"),
 ]
 
-MOCK_ACCOUNTS = [
-    {"number": "FR76 1234 5678 9012", "name": "Personal Checking", "balance": "€ 4,820.50", "date": "01/01/2026"},
-    {"number": "FR76 0987 6543 2109", "name": "Emergency Savings", "balance": "€ 12,300.00", "date": "05/02/2025"},
-    {"number": "FR76 1122 3344 5566", "name": "Business Account",  "balance": "€ 8,450.00",  "date": "10/12/2025"},
-    {"number": "FR76 1122 3344 5566", "name": "Business Account",  "balance": "€ 8,450.00",  "date": "10/12/2025"},
-    {"number": "FR76 1122 3344 5566", "name": "Business Account",  "balance": "€ 8,450.00",  "date": "10/12/2025"},
-    {"number": "FR76 1122 3344 5566", "name": "Business Account",  "balance": "€ 8,450.00",  "date": "10/12/2025"}
-]
 
 # ── ROUTING ────────────────────────────────────────────────────────────────
 SECTIONS = {
@@ -43,6 +35,6 @@ SECTIONS = {
     # history gets the entire list of transactions
     "History":      lambda root, frame: render_history(root, frame, MOCK_TRANSACTIONS),
     "Transactions": render_transactions,
-    "Accounts":     lambda root, frame: render_accounts(root, frame, MOCK_ACCOUNTS),
+    "Accounts":     lambda root, frame: render_accounts(root, frame),
     "Settings":     lambda root, frame: render_settings(root, frame),
 }
