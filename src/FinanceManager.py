@@ -14,6 +14,11 @@ class FinanceManager:
     def get_user_accounts(root):
         query = "SELECT * FROM account WHERE id_user = %s"
         return root.database.run_request(query, (root.account_id,))
+    
+    @staticmethod
+    def create_account(root):
+        query = "INSERT INTO account (id_user, balance, can_overdrawn) VALUES (%s, 0, 0)"
+        root.database.run_request(query, (root.account_id,))
 
     @staticmethod
     def get_user_name(root):

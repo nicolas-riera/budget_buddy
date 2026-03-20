@@ -55,7 +55,8 @@ def render_accounts(root, frame):
     btn_create = ctk.CTkButton(
         footer_frame, text="Create Account", font=("Arial", 16, "bold"),
         fg_color="#A8D8FF", text_color="#183652", hover_color="#6BA4D8",
-        height=45, corner_radius=8
+        height=45, corner_radius=8,
+        command=lambda: FinanceManager.create_account(root)
     )
     btn_create.pack(side="left", expand=True, fill="x", padx=(0, 10))
 
