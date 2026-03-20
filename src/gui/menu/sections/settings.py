@@ -38,7 +38,12 @@ def render_settings(root, frame):
     # Number of accounts
     accounts_label = ctk.CTkLabel(info_container, text=f"Bank Accounts: {FinanceManager.get_user_accounts_count(root)}", 
                                   font=("Arial", 16, "bold"), text_color="#A8D8FF")
-    accounts_label.pack(pady=15)
+    accounts_label.pack(pady=5)
+
+    # Creation date
+    creation_date_label = ctk.CTkLabel(info_container, text=f"Opened: {FinanceManager.get_user_creation_date(root)}", 
+                                  font=("Arial", 12, "bold"), text_color="#C0B0AE")
+    creation_date_label.pack(pady=5)
 
     # ── Footer Buttons ─────────────────────────────────────────────────────
     footer_frame = ctk.CTkFrame(frame, fg_color="transparent")

@@ -20,8 +20,14 @@ class FinanceManager:
         query = "SELECT email FROM users WHERE id = %s"
         return root.database.run_request(query, (root.account_id,))[0]
 
+    @staticmethod
     def get_user_accounts_count(root):
         query = "SELECT COUNT(*) FROM account WHERE id_user = %s"
+        return root.database.run_request(query, (root.account_id,))[0][0]
+    
+    @staticmethod
+    def get_user_creation_date(root):
+        query = "SELECT creation_date FROM users WHERE id = %s"
         return root.database.run_request(query, (root.account_id,))[0][0]
 
     @staticmethod
