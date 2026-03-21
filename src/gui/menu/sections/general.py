@@ -12,7 +12,9 @@ def render_general(frame, balance, account_name, account_id, all_transactions):
             return [("N/A", 0, 0)]
         from collections import defaultdict
         data = defaultdict(lambda: {"exp": 0.0, "inc": 0.0})
-        for _, amt_str, _, date in txs:
+        for tx in txs:
+            amt_str = tx[1]
+            date = tx[3]
             val_str = amt_str.replace("€", "").replace(",", "").replace("+", "").replace(" ", "")
             val = float(val_str)
             if val < 0:
@@ -81,7 +83,11 @@ def render_general(frame, balance, account_name, account_id, all_transactions):
     scroll.grid(row=1, column=0, sticky="nsew", padx=8, pady=(0, 8))
     scroll.columnconfigure(0, weight=1)
 
-    for i, (label, amount, color, date) in enumerate(recent_transactions):
+    for i, tx in enumerate(recent_transactions):
+        label = tx[0]
+        amount = tx[1]
+        color = tx[2]
+        date = tx[3]
         row_frame = ctk.CTkFrame(scroll, fg_color="#6E5B58", corner_radius=8)
         row_frame.grid(row=i, column=0, sticky="ew", padx=4, pady=3)
         row_frame.columnconfigure(1, weight=1)

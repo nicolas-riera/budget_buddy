@@ -19,18 +19,18 @@ MOCK_ACCOUNTS = [
         "balance": "€ 4,820.50", 
         "date": "01/01/2026",
         "transactions": [
-            ("Grocery store",    "-€ 52.30",  "#FF9E9E", "03/19/2026"),
-            ("Salary",           "+€ 2,100.00", "#C8F0C0", "03/18/2026"),
-            ("Netflix",          "-€ 15.99",  "#FF9E9E", "03/17/2026"),
-            ("Electric bill",    "-€ 78.00",  "#FF9E9E", "03/14/2026"),
-            ("Restaurant",       "-€ 34.50",  "#FF9E9E", "03/12/2026"),
-            ("Amazon",           "-€ 24.90",  "#FF9E9E", "03/05/2026"),
-            ("Gym membership",   "-€ 29.99",  "#FF9E9E", "03/01/2026"),
-            ("Grocery store",    "-€ 89.20",  "#FF9E9E", "02/25/2026"),
-            ("Steam games",      "-€ 45.00",  "#FF9E9E", "02/20/2026"),
-            ("Salary",           "+€ 2,100.00", "#C8F0C0", "02/18/2026"),
-            ("Dinner out",       "-€ 85.00",  "#FF9E9E", "02/15/2026"),
-            ("Spotify",          "-€ 10.99",  "#FF9E9E", "02/13/2026"),
+            ("Grocery store",    "-€ 52.30",  "#FF9E9E", "03/19/2026", "Alimentation", "Withdrawal"),
+            ("Salary",           "+€ 2,100.00", "#C8F0C0", "03/18/2026", "Salaire", "Deposit"),
+            ("Netflix",          "-€ 15.99",  "#FF9E9E", "03/17/2026", "Loisir", "Withdrawal"),
+            ("Electric bill",    "-€ 78.00",  "#FF9E9E", "03/14/2026", "Factures", "Withdrawal"),
+            ("Restaurant",       "-€ 34.50",  "#FF9E9E", "03/12/2026", "Repas", "Withdrawal"),
+            ("Amazon",           "-€ 24.90",  "#FF9E9E", "03/05/2026", "Loisir", "Withdrawal"),
+            ("Gym membership",   "-€ 29.99",  "#FF9E9E", "03/01/2026", "Loisir", "Withdrawal"),
+            ("Grocery store",    "-€ 89.20",  "#FF9E9E", "02/25/2026", "Alimentation", "Withdrawal"),
+            ("Steam games",      "-€ 45.00",  "#FF9E9E", "02/20/2026", "Loisir", "Withdrawal"),
+            ("Salary",           "+€ 2,100.00", "#C8F0C0", "02/18/2026", "Salaire", "Deposit"),
+            ("Dinner out",       "-€ 85.00",  "#FF9E9E", "02/15/2026", "Repas", "Withdrawal"),
+            ("Spotify",          "-€ 10.99",  "#FF9E9E", "02/13/2026", "Loisir", "Withdrawal"),
         ]
     },
     {
@@ -39,7 +39,8 @@ MOCK_ACCOUNTS = [
         "balance": "€ 12,300.00", 
         "date": "05/02/2025",
         "transactions": [
-            ("Transfer in",      "+€ 200.00", "#C8F0C0", "03/10/2026"),
+            ("Transfer in",      "+€ 200.00", "#C8F0C0", "03/10/2026", "Transfert", "Transfer"),
+            ("Pot-de-vin",       "-€ 500.00", "#FF9E9E", "01/15/2026", "Pot-de-vin", "Withdrawal"),
         ]
     },
     {
@@ -48,8 +49,9 @@ MOCK_ACCOUNTS = [
         "balance": "€ 8,450.00",  
         "date": "10/12/2025",
         "transactions": [
-            ("Freelance invoice","+€ 50.00",  "#C8F0C0", "03/17/2026"),
-            ("Freelance invoice","+€ 450.00", "#C8F0C0", "02/28/2026"),
+            ("Freelance invoice","+€ 50.00",  "#C8F0C0", "03/17/2026", "Revenu", "Deposit"),
+            ("Freelance invoice","+€ 450.00", "#C8F0C0", "02/28/2026", "Revenu", "Deposit"),
+            ("Client lunch",     "-€ 120.00", "#FF9E9E", "02/25/2026", "Repas", "Withdrawal"),
         ]
     }
 ]
