@@ -31,7 +31,7 @@ def render_history(frame, transactions):
     # Category
     ctk.CTkLabel(filter_frame, text="Category:", font=("Arial", 12), text_color=COLOR_TEXT_LIGHT).grid(row=0, column=2, padx=10, pady=(5,0), sticky="w")
     cat_var = ctk.StringVar(value="All")
-    ctk.CTkOptionMenu(filter_frame, variable=cat_var, values=["All", "Alimentation", "Salaire", "Loisir", "Factures", "Repas", "Transfert", "Pot-de-vin", "Revenu"], fg_color="#5D4C4A", button_color="#4F403E", button_hover_color="#4F403E").grid(row=1, column=2, padx=10, pady=(0,5), sticky="ew")
+    ctk.CTkOptionMenu(filter_frame, variable=cat_var, values=["All", "Groceries", "Salary", "Entertainment", "Bills", "Dining", "Transfer", "Bribe", "Income"], fg_color="#5D4C4A", button_color="#4F403E", button_hover_color="#4F403E").grid(row=1, column=2, padx=10, pady=(0,5), sticky="ew")
 
     # Type
     ctk.CTkLabel(filter_frame, text="Type:", font=("Arial", 12), text_color=COLOR_TEXT_LIGHT).grid(row=2, column=0, padx=10, pady=(0,0), sticky="w")
