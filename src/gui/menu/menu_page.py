@@ -46,6 +46,9 @@ def menu_page(root):
         btn.configure(font=ACTIVE_FONT, text_color=COLOR_TEXT_LIGHT)
         current_btn["ref"] = btn
         
+        # Re-render section to ensure latest data is displayed
+        SECTIONS[name](section_frames[name])
+        
         # Instantly bring the chosen frame to the absolute front (Z-index top)
         # This completely hides the others without doing costly geometry recalculations!
         section_frames[name].tkraise()

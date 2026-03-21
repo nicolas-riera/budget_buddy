@@ -21,7 +21,7 @@ def render_general(frame, balance, account_name, account_id, all_transactions):
                 data[date]["inc"] += val
                 
         sorted_dates = sorted(data.keys())[-7:]
-        return [(d.split("/")[-1] if "/" in d else d, data[d]["exp"], data[d]["inc"]) for d in sorted_dates]
+        return [("/".join(d.split("/")[:2]) if "/" in d else d, data[d]["exp"], data[d]["inc"]) for d in sorted_dates]
 
     chart_data = _compute_chart(all_transactions)
     recent_transactions = all_transactions[:7]

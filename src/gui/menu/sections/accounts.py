@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from src.gui.color_palette import *
 
-def render_accounts(frame, mock_accounts):
+def render_accounts(frame, mock_accounts, set_active_cb=None, active_idx=0):
     for widget in frame.winfo_children():
         widget.destroy()
 
@@ -37,9 +37,23 @@ def render_accounts(frame, mock_accounts):
         ctk.CTkLabel(row_frame, text=f"Opened: {acc['date']}", font=("Arial", 12),
                      text_color="#C0B0AE").pack(side="left", padx=10)
                      
+        # Action (Active / Set Active)
+        if i == active_idx:
+            ctk.CTkLabel(row_frame, text="Active", font=("Arial", 14, "bold"),
+                         text_color="#C8F0C0", width=100).pack(side="right", padx=15)
+        else:
+            if set_active_cb:
+                btn_set_active = ctk.CTkButton(
+                    row_frame, text="Set Active", font=("Arial", 12, "bold"),
+                    fg_color="#A8D8FF", text_color="#183652", hover_color="#6BA4D8",
+                    height=30, width=100, corner_radius=8,
+                    command=lambda idx=i: set_active_cb(idx, frame)
+                )
+                btn_set_active.pack(side="right", padx=15)
+                
         # Balance
         ctk.CTkLabel(row_frame, text=acc["balance"], font=("Arial", 20, "bold"),
-                     text_color="#C8F0C0", anchor="e").pack(side="right", padx=20)
+                     text_color="#C8F0C0", anchor="e").pack(side="right", padx=10)
 
     # ── Footer Buttons ─────────────────────────────────────────────────────
     footer_frame = ctk.CTkFrame(frame, fg_color="transparent")
