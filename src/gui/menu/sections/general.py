@@ -28,33 +28,49 @@ def render_general(frame, balance, account_name, account_id, all_transactions):
     chart_data = _compute_chart(all_transactions)
     recent_transactions = all_transactions[:7]
 
-
-    # ── main grid : 2 rows × 2 columns ─────────────────────────────────────
+    # ── main grid ──────────────────────────────────────────────────────────
+    PAD = 12
     frame.columnconfigure(0, weight=1)
     frame.columnconfigure(1, weight=1)
-    frame.rowconfigure(0, weight=0)   # fixed header
-    frame.rowconfigure(1, weight=1)   # expanding body
 
-    # ── general padding ────────────────────────────────────────────────────
-    PAD = 12
+    # Overdraft Detection
+    val_str = balance.replace("€", "").replace(",", "").replace("+", "").replace(" ", "")
+    try:
+        bal_val = float(val_str)
+    except:
+        bal_val = 0.0
+
+    has_alert = bal_val < 0
+    start_row = 1 if has_alert else 0
+
+    if has_alert:
+        frame.rowconfigure(0, weight=0)
+        alert_frame = ctk.CTkFrame(frame, fg_color="#FF9E9E", corner_radius=8)
+        alert_frame.grid(row=0, column=0, columnspan=2, padx=PAD, pady=(PAD, 0), sticky="ew")
+        
+        ctk.CTkLabel(alert_frame, text="⚠️ ALERT: This account is currently in overdraft. Please add funds to avoid fees.",
+                     font=("Arial", 14, "bold"), text_color="#4A1C1C").pack(pady=10)
+
+    frame.rowconfigure(start_row, weight=0)       # fixed header
+    frame.rowconfigure(start_row + 1, weight=1)   # expanding body
 
     # ─────────────────────────── TOP-LEFT : Balance ────────────────────────
     balance_card = ctk.CTkFrame(frame, fg_color=COLOR_CARD, corner_radius=12,
                                 border_width=1, border_color=COLOR_BORDER)
-    balance_card.grid(row=0, column=0, padx=(PAD, PAD//2), pady=(PAD, PAD//2), sticky="nsew")
+    balance_card.grid(row=start_row, column=0, padx=(PAD, PAD//2), pady=(PAD, PAD//2), sticky="nsew")
 
     ctk.CTkLabel(balance_card, text="Balance",
                  font=("Arial", 13, "bold"), text_color=COLOR_TEXT_LIGHT,
                  anchor="w").pack(anchor="w", padx=14, pady=(10, 2))
 
     ctk.CTkLabel(balance_card, text=balance,
-                 font=("Arial", 26, "bold"), text_color="#C8F0C0",
+                 font=("Arial", 26, "bold"), text_color="#C8F0C0" if not has_alert else "#FF9E9E",
                  anchor="w").pack(anchor="w", padx=14, pady=(0, 10))
 
     # ─────────────────────────── TOP-RIGHT : Account ───────────────────────
     account_card = ctk.CTkFrame(frame, fg_color=COLOR_CARD, corner_radius=12,
                                 border_width=1, border_color=COLOR_BORDER)
-    account_card.grid(row=0, column=1, padx=(PAD//2, PAD), pady=(PAD, PAD//2), sticky="nsew")
+    account_card.grid(row=start_row, column=1, padx=(PAD//2, PAD), pady=(PAD, PAD//2), sticky="nsew")
 
     ctk.CTkLabel(account_card, text="Account",
                  font=("Arial", 13, "bold"), text_color=COLOR_TEXT_LIGHT,
@@ -69,8 +85,8 @@ def render_general(frame, balance, account_name, account_id, all_transactions):
 
     # ─────────────────── BOTTOM-LEFT : Recent History ──────────────────────
     recent_card = ctk.CTkFrame(frame, fg_color=COLOR_CARD, corner_radius=12,
-                               border_width=1, border_color=COLOR_BORDER)
-    recent_card.grid(row=1, column=0, padx=(PAD, PAD//2), pady=(PAD//2, PAD), sticky="nsew")
+                                border_width=1, border_color=COLOR_BORDER)
+    recent_card.grid(row=start_row + 1, column=0, padx=(PAD, PAD//2), pady=(PAD//2, PAD), sticky="nsew")
     recent_card.rowconfigure(1, weight=1)
     recent_card.columnconfigure(0, weight=1)
 
@@ -102,7 +118,7 @@ def render_general(frame, balance, account_name, account_id, all_transactions):
     # ─────────────────── BOTTOM-RIGHT : Transaction Chart ──────────────────
     chart_card = ctk.CTkFrame(frame, fg_color=COLOR_CARD, corner_radius=12,
                               border_width=1, border_color=COLOR_BORDER)
-    chart_card.grid(row=1, column=1, padx=(PAD//2, PAD), pady=(PAD//2, PAD), sticky="nsew")
+    chart_card.grid(row=start_row + 1, column=1, padx=(PAD//2, PAD), pady=(PAD//2, PAD), sticky="nsew")
     chart_card.rowconfigure(1, weight=1)
     chart_card.columnconfigure(0, weight=1)
 

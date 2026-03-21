@@ -53,6 +53,16 @@ MOCK_ACCOUNTS = [
             ("Freelance invoice","+€ 450.00", "#C8F0C0", "02/28/2026", "Income", "Deposit"),
             ("Client lunch",     "-€ 120.00", "#FF9E9E", "02/25/2026", "Dining", "Withdrawal"),
         ]
+    },
+    {
+        "number": "4", 
+        "name": "Credit Card",  
+        "balance": "-€ 450.00",  
+        "date": "11/20/2025",
+        "transactions": [
+            ("Amazon",           "-€ 250.00", "#FF9E9E", "03/15/2026", "Entertainment", "Withdrawal"),
+            ("Grocery store",    "-€ 200.00", "#FF9E9E", "03/10/2026", "Groceries", "Withdrawal"),
+        ]
     }
 ]
 
