@@ -3,6 +3,7 @@ import customtkinter as ctk
 from customtkinter import CTkFont
 
 from src.gui.menu.sections.sections import SECTIONS
+from src.gui.menu.refresh_section import setup_refresh, refresh_section
 
 def menu_page(root):
 
@@ -34,8 +35,10 @@ def menu_page(root):
         f.grid_propagate(False)
         render_func(root, f)
         section_frames[section_name] = f
+    setup_refresh(SECTIONS, section_frames)
 
     # ── Section selection ──────────────────────────────────────────────────
+
     current_btn = {"ref": None}
 
     def select(btn, name):
@@ -46,9 +49,7 @@ def menu_page(root):
         btn.configure(font=ACTIVE_FONT, text_color=COLOR_TEXT_LIGHT)
         current_btn["ref"] = btn
         
-        # Instantly bring the chosen frame to the absolute front (Z-index top)
-        # This completely hides the others without doing costly geometry recalculations!
-        section_frames[name].tkraise()
+        refresh_section(root, name)      
 
     def make_btn(name, row):
         btn = ctk.CTkButton(

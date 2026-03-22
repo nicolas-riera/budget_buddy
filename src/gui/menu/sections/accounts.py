@@ -1,10 +1,17 @@
 import customtkinter as ctk
-from datetime import datetime
 
 from src.gui.color_palette import *
 from src.FinanceManager import FinanceManager
+from src.gui.menu.refresh_section import refresh_section
 
 def render_accounts(root, frame):
+
+    def set_active(root, id):
+        root.account_active_id = id
+
+    if not hasattr(root, "account_active_id"):
+        root.account_active_id = 0
+
     for widget in frame.winfo_children():
         widget.destroy()
 
@@ -40,13 +47,26 @@ def render_accounts(root, frame):
         ctk.CTkLabel(row_frame, text=f"Opened: {acc[3]}", font=("Arial", 12),
                      text_color="#C0B0AE").pack(side="left", padx=10)
                      
+        # Action (Active / Set Active)
+        if enum == root.account_active_id:
+            ctk.CTkLabel(row_frame, text="Active", font=("Arial", 14, "bold"),
+                         text_color="#C8F0C0", width=100).pack(side="right", padx=15)
+        else:
+            btn_set_active = ctk.CTkButton(
+                row_frame, text="Set Active", font=("Arial", 12, "bold"),
+                fg_color="#A8D8FF", text_color="#183652", hover_color="#6BA4D8",
+                height=30, width=100, corner_radius=8,
+                command=lambda id=enum: (set_active(root, id), refresh_section(root, "Accounts"))
+            )
+            btn_set_active.pack(side="right", padx=15)
+                
         # Balance
         if acc[2] > 0:
             text_color_balance = COLOR_AMOUNT_GREEN
         else:
             text_color_balance = COLOR_AMOUNT_RED
         ctk.CTkLabel(row_frame, text=f"€ {acc[2]}", font=("Arial", 20, "bold"),
-                     text_color=text_color_balance, anchor="e").pack(side="right", padx=20)
+                     text_color=text_color_balance, anchor="e").pack(side="right", padx=10)
 
     # ── Footer Buttons ─────────────────────────────────────────────────────
     footer_frame = ctk.CTkFrame(frame, fg_color="transparent")
@@ -56,7 +76,7 @@ def render_accounts(root, frame):
         footer_frame, text="Create Account", font=("Arial", 16, "bold"),
         fg_color="#A8D8FF", text_color="#183652", hover_color="#6BA4D8",
         height=45, corner_radius=8,
-        command=lambda: FinanceManager.create_account(root)
+        command=lambda: (FinanceManager.create_account(root), refresh_section(root, "Accounts"))
     )
     btn_create.pack(side="left", expand=True, fill="x", padx=(0, 10))
 
