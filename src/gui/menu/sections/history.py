@@ -16,7 +16,6 @@ def render_history(root, frame, transactions):
 
     # ── Filters/Sorting Grid ───────────────────────────────────────────────
     filter_frame = ctk.CTkFrame(frame, fg_color="#6E5B58", corner_radius=8)
-    filter_frame.pack(fill="x", padx=30, pady=(0, 10))
     filter_frame.columnconfigure((0,1,2), weight=1)
 
     # Date Start
@@ -45,6 +44,25 @@ def render_history(root, frame, transactions):
     ctk.CTkOptionMenu(filter_frame, variable=sort_var, values=["Date (Newest)", "Date (Oldest)", "Price (High to Low)", "Price (Low to High)", "Vendor (A-Z)", "Vendor (Z-A)"], fg_color="#5D4C4A", button_color="#4F403E", button_hover_color="#4F403E").grid(row=3, column=1, padx=10, pady=(0,10), sticky="ew")
 
     current_txs = list(transactions)
+
+    # ── Show/Hide Filters Button ─────────────────────────────────────────────
+    filter_visible = False 
+
+    def toggle_filters():
+        nonlocal filter_visible
+        if filter_visible:
+            filter_frame.pack_forget()
+            toggle_btn.configure(text="Show Filters")
+            filter_visible = False
+        else:
+            filter_frame.pack(fill="x", padx=30, pady=(0, 10), before=list_card)
+            toggle_btn.configure(text="Hide Filters")
+            filter_visible = True
+
+    # Bouton compact, pas fill="x"
+    toggle_btn = ctk.CTkButton(frame, text="Show Filters", command=toggle_filters, 
+                                width=120, height=30, fg_color="#A8D8FF", text_color="#183652", hover_color="#6BA4D8")
+    toggle_btn.pack(padx=30, pady=(10,5))
 
     # ── Scrollable List ────────────────────────────────────────────────────
     list_card = ctk.CTkFrame(frame, fg_color=COLOR_CARD, corner_radius=12,
