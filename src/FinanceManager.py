@@ -1,4 +1,10 @@
 class FinanceManager:
+
+    @staticmethod
+    def get_transactions(root, account_id):
+        query = "SELECT description, amount, date, type FROM transactions WHERE id_account = %s ORDER BY date DESC"
+        return root.database.run_request(query, (account_id,))
+
     @staticmethod
     def deposit(root, amount, account_id, type, description):
         query_transation = "INSERT INTO transactions (id_account, amount, type, description) VALUES (%s, %s, %s, %s)"

@@ -1,9 +1,10 @@
 import customtkinter as ctk
-
-from src.gui.color_palette import *
 from datetime import datetime
 
-def render_history(root, frame, transactions):
+from src.gui.color_palette import *
+from src.FinanceManager import FinanceManager
+
+def render_history(root, frame):
     for widget in frame.winfo_children():
         widget.destroy()
 
@@ -19,19 +20,19 @@ def render_history(root, frame, transactions):
     filter_frame.columnconfigure((0,1,2), weight=1)
 
     # Date Start
-    ctk.CTkLabel(filter_frame, text="Start Date (MM/DD/YYYY):", font=("Arial", 12), text_color=COLOR_TEXT_LIGHT).grid(row=0, column=0, padx=10, pady=(5,0), sticky="w")
+    ctk.CTkLabel(filter_frame, text="Start Date (YYYY-MM-DD):", font=("Arial", 12), text_color=COLOR_TEXT_LIGHT).grid(row=0, column=0, padx=10, pady=(5,0), sticky="w")
     start_date_var = ctk.StringVar()
     ctk.CTkEntry(filter_frame, textvariable=start_date_var, font=("Arial", 12), fg_color="#5D4C4A", border_color="#4F403E", text_color=COLOR_TEXT_LIGHT).grid(row=1, column=0, padx=10, pady=(0,5), sticky="ew")
 
     # Date End
-    ctk.CTkLabel(filter_frame, text="End Date (MM/DD/YYYY):", font=("Arial", 12), text_color=COLOR_TEXT_LIGHT).grid(row=0, column=1, padx=10, pady=(5,0), sticky="w")
+    ctk.CTkLabel(filter_frame, text="End Date (YYYY-MM-DD):", font=("Arial", 12), text_color=COLOR_TEXT_LIGHT).grid(row=0, column=1, padx=10, pady=(5,0), sticky="w")
     end_date_var = ctk.StringVar()
     ctk.CTkEntry(filter_frame, textvariable=end_date_var, font=("Arial", 12), fg_color="#5D4C4A", border_color="#4F403E", text_color=COLOR_TEXT_LIGHT).grid(row=1, column=1, padx=10, pady=(0,5), sticky="ew")
 
     # Category
     ctk.CTkLabel(filter_frame, text="Category:", font=("Arial", 12), text_color=COLOR_TEXT_LIGHT).grid(row=0, column=2, padx=10, pady=(5,0), sticky="w")
     cat_var = ctk.StringVar(value="All")
-    ctk.CTkOptionMenu(filter_frame, variable=cat_var, values=["All", "Groceries", "Salary", "Entertainment", "Bills", "Dining", "Transfer", "Bribe", "Income"], fg_color="#5D4C4A", button_color="#4F403E", button_hover_color="#4F403E").grid(row=1, column=2, padx=10, pady=(0,5), sticky="ew")
+    ctk.CTkOptionMenu(filter_frame, variable=cat_var, values=["All", "Income", "Groceries", "Dining", "Bills", "Entertainment", "Transport", "Health", "Shopping", "Education", "Transfer", "Other"], fg_color="#5D4C4A", button_color="#4F403E", button_hover_color="#4F403E").grid(row=1, column=2, padx=10, pady=(0,5), sticky="ew")
 
     # Type
     ctk.CTkLabel(filter_frame, text="Type:", font=("Arial", 12), text_color=COLOR_TEXT_LIGHT).grid(row=2, column=0, padx=10, pady=(0,0), sticky="w")
@@ -43,7 +44,12 @@ def render_history(root, frame, transactions):
     sort_var = ctk.StringVar(value="Date (Newest)")
     ctk.CTkOptionMenu(filter_frame, variable=sort_var, values=["Date (Newest)", "Date (Oldest)", "Price (High to Low)", "Price (Low to High)", "Vendor (A-Z)", "Vendor (Z-A)"], fg_color="#5D4C4A", button_color="#4F403E", button_hover_color="#4F403E").grid(row=3, column=1, padx=10, pady=(0,10), sticky="ew")
 
-    current_txs = list(transactions)
+    for enum, acc in enumerate(FinanceManager.get_user_accounts(root)):
+
+        if enum == root.account_active_id:
+            active_acc_id = acc[0]
+
+    current_txs = FinanceManager.get_transactions(root, active_acc_id)
 
     # ── Show/Hide Filters Button ─────────────────────────────────────────────
     filter_visible = False 
@@ -78,11 +84,17 @@ def render_history(root, frame, transactions):
             widget.destroy()
             
         for i, tx in enumerate(current_txs):
-            label = tx[0]
+            if tx[0] != "":
+                label = tx[0]
+            else:
+                label = "Unknown"
             amount = tx[1]
-            color = tx[2]
-            date = tx[3]
-            category = tx[4] if len(tx) > 4 else "Unknown"
+            if int(amount) > 0:
+                color = COLOR_AMOUNT_GREEN
+            else:
+                color = COLOR_AMOUNT_RED
+            date = tx[2]
+            category = tx[3] 
 
             row_frame = ctk.CTkFrame(scroll, fg_color="#6E5B58", corner_radius=8, height=45)
             row_frame.pack(fill="x", pady=4)
@@ -97,62 +109,59 @@ def render_history(root, frame, transactions):
             ctk.CTkLabel(row_frame, text=label, font=("Arial", 14),
                          text_color=COLOR_TEXT_LIGHT, anchor="w").pack(side="left", padx=10, fill="x", expand=True)
                          
-            ctk.CTkLabel(row_frame, text=amount, font=("Arial", 14, "bold"),
+            ctk.CTkLabel(row_frame, text=f"€ {amount}", font=("Arial", 14, "bold"),
                          text_color=color, anchor="e").pack(side="right", padx=15)
+
+    all_txs = list(current_txs)  
 
     def apply_filters():
         nonlocal current_txs
         filtered = []
 
         def parse_date(d_str):
+            # Parse YYYY-MM-DD format safely.
             try:
-                return datetime.strptime(d_str, "%m/%d/%Y")
+                return datetime.strptime(d_str, "%Y-%m-%d")
             except:
-                return datetime.min
+                return None  
 
         d_s_str = start_date_var.get().strip()
         d_e_str = end_date_var.get().strip()
-        
+
         d_start = parse_date(d_s_str) if d_s_str else datetime.min
         d_end = parse_date(d_e_str) if d_e_str else datetime.max
 
-        # Ensure inclusive matching if one day is specified
-        if d_end == datetime.min: d_end = datetime.max
-
         cat = cat_var.get()
         t_type = type_var.get()
-        
-        for tx in transactions:
-            ctg = tx[4] if len(tx) > 4 else "Unknown"
-            typ = tx[5] if len(tx) > 5 else "Unknown"
-            
-            tx_date = parse_date(tx[3])
-            
-            if tx_date < d_start or tx_date > d_end:
-                continue
-            if cat != "All" and ctg != cat:
-                continue
-            if t_type != "All" and typ != t_type:
-                continue
-                
-            filtered.append(tx)
 
-        def parse_price(p_str):
-            val = p_str.replace("€", "").replace(",", "").replace("+", "").replace(" ", "")
-            try:
-                return float(val)
-            except:
-                return 0.0
+        for tx in all_txs:  
+            tx_date = tx[2] 
+            category = tx[3]  
+
+            if not isinstance(tx_date, datetime):
+                continue  
+
+            if d_start and tx_date < d_start:
+                continue
+            if d_end and tx_date > d_end:
+                continue
+
+            if cat != "All" and category != cat:
+                continue
+            if t_type != "All" and category != t_type:
+                continue
+
+            filtered.append(tx)
 
         choice = sort_var.get()
         if choice == "Date (Newest)":
-            filtered.sort(key=lambda x: parse_date(x[3]), reverse=True)
+            filtered.sort(key=lambda x: x[2], reverse=True)
         elif choice == "Date (Oldest)":
-            filtered.sort(key=lambda x: parse_date(x[3]))
+            filtered.sort(key=lambda x: x[2])
         elif choice == "Price (High to Low)":
-            filtered.sort(key=lambda x: parse_price(x[1]), reverse=True)
+            filtered.sort(key=lambda x: x[1], reverse=True)
         elif choice == "Price (Low to High)":
-            filtered.sort(key=lambda x: parse_price(x[1]))
+            filtered.sort(key=lambda x: x[1])
         elif choice == "Vendor (A-Z)":
             filtered.sort(key=lambda x: x[0].lower())
         elif choice == "Vendor (Z-A)":
