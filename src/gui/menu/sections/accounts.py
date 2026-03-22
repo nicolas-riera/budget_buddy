@@ -9,6 +9,7 @@ def render_accounts(root, frame):
     def set_active(root, id):
         root.account_active_id = id
 
+    # Create the attribut if it doesn't exist
     if not hasattr(root, "account_active_id"):
         root.account_active_id = 0
 
@@ -30,6 +31,8 @@ def render_accounts(root, frame):
     scroll = ctk.CTkScrollableFrame(list_card, fg_color="transparent")
     scroll.pack(fill="both", expand=True, padx=15, pady=15)
 
+    accounts_enum_id = {}
+
     for enum, acc in enumerate(FinanceManager.get_user_accounts(root)):
         row_frame = ctk.CTkFrame(scroll, fg_color="#6E5B58", corner_radius=8, height=65)
         row_frame.pack(fill="x", pady=6)
@@ -42,6 +45,7 @@ def render_accounts(root, frame):
         # Number
         ctk.CTkLabel(row_frame, text=f"N° {acc[0]}", font=("Arial", 14),
                      text_color="#C0B0AE", anchor="w").pack(side="left", padx=10)
+        
         
         # Date
         ctk.CTkLabel(row_frame, text=f"Opened: {acc[3]}", font=("Arial", 12),
@@ -67,6 +71,8 @@ def render_accounts(root, frame):
             text_color_balance = COLOR_AMOUNT_RED
         ctk.CTkLabel(row_frame, text=f"€ {acc[2]}", font=("Arial", 20, "bold"),
                      text_color=text_color_balance, anchor="e").pack(side="right", padx=10)
+        
+        accounts_enum_id[enum] = acc[0]
 
     # ── Footer Buttons ─────────────────────────────────────────────────────
     footer_frame = ctk.CTkFrame(frame, fg_color="transparent")
@@ -81,8 +87,9 @@ def render_accounts(root, frame):
     btn_create.pack(side="left", expand=True, fill="x", padx=(0, 10))
 
     btn_delete = ctk.CTkButton(
-        footer_frame, text="Delete Existing Account", font=("Arial", 16, "bold"),
+        footer_frame, text="Delete Active Account", font=("Arial", 16, "bold"),
         fg_color="#FF9E9E", text_color="#4A1C1C", hover_color="#E87272",
-        height=45, corner_radius=8
+        height=45, corner_radius=8,
+        command= lambda: (FinanceManager.delete_account(root, accounts_enum_id[root.account_active_id]), set_active(root, 0), refresh_section(root, "Accounts"))
     )
     btn_delete.pack(side="right", expand=True, fill="x", padx=(10, 0))
