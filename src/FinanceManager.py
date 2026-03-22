@@ -3,15 +3,36 @@ class FinanceManager:
     def deposit(root, amount, account_id, type, description):
         query_transation = "INSERT INTO transactions (id_account, amount, type, description) VALUES (%s, %s, %s, %s)"
         query_account = "UPDATE account SET balance = balance + %s WHERE id = %s"
-        
+
         root.database.run_request(query_transation, (account_id, amount, type, description))
         root.database.run_request(query_account, (amount, account_id))
 
     @staticmethod
-    def withdraw(root, amount):
-        # todo : add overdrown check
-        query = ""
-        root.database.run_request(query, (amount, root.account_id))
+    def withdraw(root, amount, account_id, type, description):
+        query_transation = "INSERT INTO transactions (id_account, amount, type, description) VALUES (%s, -%s, %s, %s)"
+        query_account = "UPDATE account SET balance = balance - %s WHERE id = %s"
+
+        root.database.run_request(query_transation, (account_id, amount, type, description))
+        root.database.run_request(query_account, (amount, account_id))
+
+    @staticmethod
+    def check_account_can_overdrawn(root, account_id):
+        query = "SELECT can_overdrawn FROM account WHERE id = %s"
+        if root.database.run_request(query, (account_id,))[0][0] == 0:
+            return False
+        else:
+            return True
+
+    @staticmethod
+    def check_balance(root, account_id, amount):
+        if FinanceManager.check_account_can_overdrawn(root, account_id):
+            return True
+        query = "SELECT balance FROM account WHERE id = %s"
+        balance = root.database.run_request(query, (account_id,))[0][0]
+        if balance - float(amount) >= 0:
+            return True
+        else:
+            return False
 
     @staticmethod
     def get_user_accounts(root):

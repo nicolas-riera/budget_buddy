@@ -31,12 +31,19 @@ def render_transactions(root, frame):
     def on_deposit_confirm(values):
         if validate_amount(values["Amount"]):
             FinanceManager.deposit(root, values["Amount"], int(re.search(r'\d+', values["Account"]).group()), values["Category"] ,process_description(values["Description"]))
-            success_label.configure(text=f"€ {values["Amount"]} has been deposit.")
+            success_label.configure(text=f"€ {values["Amount"]} has been deposited.")
         else:
             error_label.configure(text="Invalid Amount.")
 
     def on_withdrawal_confirm(values):
-        print("Withdrawal:", values)
+        if validate_amount(values["Amount"]):
+            if FinanceManager.check_balance(root, int(re.search(r'\d+', values["Account"]).group()), values["Amount"]):
+                FinanceManager.withdraw(root, values["Amount"], int(re.search(r'\d+', values["Account"]).group()), values["Category"] ,process_description(values["Description"]))
+                success_label.configure(text=f"€ {values["Amount"]} has been withdrawn.")
+            else:
+                error_label.configure(text="Not enough balance on account.")
+        else:
+            error_label.configure(text="Invalid Amount.")
 
     def on_transfer_confirm(values):
         print("Transfer:", values)
