@@ -54,7 +54,7 @@ CREATE TABLE `transactions` (
   `id` int NOT NULL AUTO_INCREMENT,
   `id_account` int NOT NULL,
   `amount` float NOT NULL,
-  `type` varchar(255) NOT NULL,
+  `type` ENUM("Income", "Groceries", "Dining", "Bills", "Entertainment", "Transport", "Health", "Shopping", "Education", "Transfer", "Other") NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),

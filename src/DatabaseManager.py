@@ -14,8 +14,9 @@ class DatabaseManager:
                 db = os.getenv("DB_NAME")
             )
             self.successful_connection = True
-        except:
+        except Exception as error:
             self.successful_connection = False
+            self.connection_error = error
 
 
     def run_request(self, request, data=None): #takes as param the query and the data

@@ -26,10 +26,6 @@ class AuthManager:
     def hash_password(password):
         hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         return hashed
-    
-    @staticmethod
-    def check_email_format(email):
-        return re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", email) is not None
 
     @staticmethod  
     def check_email_in_db(root, email):
@@ -41,23 +37,14 @@ class AuthManager:
             return True
         else:
             return False
-        
-    @staticmethod    
-    def check_password_strengh(password):
-        if len(password) < 10:
-            return False
-        
-        has_upper = re.search(r"[A-Z]", password)
-        has_lower = re.search(r"[a-z]", password)
-        has_digit = re.search(r"\d", password)
-        has_special = re.search(r"[!@#$%^&*(),.?\":{}|<>]", password)
-
-        return all([has_upper, has_lower, has_digit, has_special])
-
+    
     @staticmethod   
     def register_user(root, firstname, lastname, email, password):
         hashed = AuthManager.hash_password(password)
         root.database.run_request("INSERT INTO users (firstname, lastname, email, password) VALUES (%s, %s, %s, %s)", (firstname, lastname, email, hashed))
         del hashed
-        return root.database.run_request("SELECT id FROM users WHERE email=%s", (email,))
+
+        id = root.database.run_request("SELECT id FROM users WHERE email=%s", (email,))[0][0]
+        root.database.run_request("INSERT INTO account (id_user, balance, can_overdrawn) VALUES (%s, 0, 0)", (id,))
+        return id
         
