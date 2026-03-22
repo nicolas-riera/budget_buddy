@@ -20,6 +20,7 @@ class BBApp(ctk.CTk):
         self.configure(fg_color=BG_COLOR) 
 
         self.account_id = None
+        self.account_active_id = 0
         self.database = DatabaseManager()
         if not self.database.successful_connection:
             server_connection_error_page(self)

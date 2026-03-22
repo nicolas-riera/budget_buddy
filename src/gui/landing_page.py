@@ -4,6 +4,8 @@ from src.gui.color_palette import COLOR_BUTTON_LANDING, COLOR_HOVER
 
 def landing_page(root):
 
+    root.clear_frame()
+
     title = ctk.CTkLabel(root, text="BUDGET BUDDY", font=("Arial", 65))
     title.place(relx=0.5, rely=0.2, anchor='center')
 

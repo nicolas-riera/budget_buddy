@@ -1,49 +1,16 @@
-import customtkinter as ctk
-from src.gui.color_palette import *
+from src.gui.menu.sections.general import render_general
+from src.gui.menu.sections.history import render_history
+from src.gui.menu.sections.transactions import render_transactions
+from src.gui.menu.sections.accounts import render_accounts
+from src.gui.menu.sections.settings import render_settings
 
-
-def render_general(frame):
-    for widget in frame.winfo_children():
-        widget.destroy()
-    ctk.CTkLabel(frame, text="• Total balance", font=("Arial", 18), text_color=COLOR_TEXT_LIGHT).pack(anchor="w", padx=40)
-    ctk.CTkLabel(frame, text="• Monthly summary", font=("Arial", 18), text_color=COLOR_TEXT_LIGHT).pack(anchor="w", padx=40)
-    ctk.CTkLabel(frame, text="• Alerts", font=("Arial", 18), text_color=COLOR_TEXT_LIGHT).pack(anchor="w", padx=40)
-
-
-def render_history(frame):
-    for widget in frame.winfo_children():
-        widget.destroy()
-    ctk.CTkLabel(frame, text="• All past transactions", font=("Arial", 18), text_color=COLOR_TEXT_LIGHT).pack(anchor="w", padx=40)
-    ctk.CTkLabel(frame, text="• Date filters", font=("Arial", 18), text_color=COLOR_TEXT_LIGHT).pack(anchor="w", padx=40)
-
-
-def render_transactions(frame):
-    for widget in frame.winfo_children():
-        widget.destroy()
-    ctk.CTkLabel(frame, text="• Add / Edit / Delete", font=("Arial", 18), text_color=COLOR_TEXT_LIGHT).pack(anchor="w", padx=40)
-    ctk.CTkLabel(frame, text="• Categorization", font=("Arial", 18), text_color=COLOR_TEXT_LIGHT).pack(anchor="w", padx=40)
-
-
-def render_accounts(frame):
-    for widget in frame.winfo_children():
-        widget.destroy()
-    ctk.CTkLabel(frame, text="• Checking account", font=("Arial", 18), text_color=COLOR_TEXT_LIGHT).pack(anchor="w", padx=40)
-    ctk.CTkLabel(frame, text="• Savings", font=("Arial", 18), text_color=COLOR_TEXT_LIGHT).pack(anchor="w", padx=40)
-    ctk.CTkLabel(frame, text="• Balances", font=("Arial", 18), text_color=COLOR_TEXT_LIGHT).pack(anchor="w", padx=40)
-
-
-def render_settings(frame):
-    for widget in frame.winfo_children():
-        widget.destroy()
-    ctk.CTkLabel(frame, text="• User profile", font=("Arial", 18), text_color=COLOR_TEXT_LIGHT).pack(anchor="w", padx=40)
-    ctk.CTkLabel(frame, text="• Currency", font=("Arial", 18), text_color=COLOR_TEXT_LIGHT).pack(anchor="w", padx=40)
-    ctk.CTkLabel(frame, text="• Notifications", font=("Arial", 18), text_color=COLOR_TEXT_LIGHT).pack(anchor="w", padx=40)
-
-
+# ── ROUTING ────────────────────────────────────────────────────────────────
 SECTIONS = {
-    "General":      render_general,
-    "History":      render_history,
-    "Transactions": render_transactions,
-    "Accounts":     render_accounts,
-    "Settings":     render_settings,
+    # general computes the graph internally so we pass the full transaction list
+    "General":      lambda root, frame: render_general(root, frame),
+    # history gets the entire list of transactions
+    "History":      lambda root, frame: render_history(root, frame),
+    "Transactions": lambda root, frame: render_transactions(root, frame),
+    "Accounts":     lambda root, frame: render_accounts(root, frame),
+    "Settings":     lambda root, frame: render_settings(root, frame),
 }
