@@ -30,7 +30,7 @@ def render_transactions(root, frame):
 
     def on_deposit_confirm(values):
         if validate_amount(values["Amount"]):
-            FinanceManager.deposit(root, values["Amount"], int(re.search(r'\d+', values["Account"]).group()), values["Category"] ,process_description(values["Description"]))
+            FinanceManager.deposit(root, values["Amount"], int(re.search(r'\d+', values["Account"]).group()), values["Category"], process_description(values["Description"]))
             success_label.configure(text=f"€ {values["Amount"]} has been deposited.")
         else:
             error_label.configure(text="Invalid Amount.")
@@ -38,7 +38,7 @@ def render_transactions(root, frame):
     def on_withdrawal_confirm(values):
         if validate_amount(values["Amount"]):
             if FinanceManager.check_balance(root, int(re.search(r'\d+', values["Account"]).group()), values["Amount"]):
-                FinanceManager.withdraw(root, values["Amount"], int(re.search(r'\d+', values["Account"]).group()), values["Category"] ,process_description(values["Description"]))
+                FinanceManager.withdraw(root, values["Amount"], int(re.search(r'\d+', values["Account"]).group()), values["Category"], process_description(values["Description"]))
                 success_label.configure(text=f"€ {values["Amount"]} has been withdrawn.")
             else:
                 error_label.configure(text="Not enough balance on account.")
@@ -46,7 +46,18 @@ def render_transactions(root, frame):
             error_label.configure(text="Invalid Amount.")
 
     def on_transfer_confirm(values):
-        print("Transfer:", values)
+        if validate_amount(values["Amount"]):
+            if FinanceManager.check_balance(root, int(re.search(r'\d+', values["Account"]).group()), values["Amount"]):
+                if FinanceManager.check_account_existence(root, values["Beneficiary"]):
+                    FinanceManager.withdraw(root, values["Amount"], int(re.search(r'\d+', values["Account"]).group()), "Transfer", process_description(values["Description"]))
+                    FinanceManager.deposit(root, values["Amount"], values["Beneficiary"], "Transfer", process_description(values["Description"]))
+                    success_label.configure(text=f"€ {values["Amount"]} has been transfered.")
+                else:
+                    error_label.configure(text="Beneficiary not found.")
+            else:
+                error_label.configure(text="Not enough balance on account.")
+        else:
+            error_label.configure(text="Invalid Amount.")
 
     for widget in frame.winfo_children():
         widget.destroy()

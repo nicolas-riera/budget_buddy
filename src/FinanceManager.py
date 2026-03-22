@@ -33,6 +33,15 @@ class FinanceManager:
             return True
         else:
             return False
+        
+    @staticmethod
+    def check_account_existence(root, account_id):
+        query = "SELECT 1 FROM account WHERE id = %s"
+        result = root.database.run_request(query, (account_id,))
+
+        if result and len(result) > 0:
+            return True
+        return False
 
     @staticmethod
     def get_user_accounts(root):
