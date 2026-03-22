@@ -7,6 +7,9 @@ from src.gui.menu.refresh_section import setup_refresh, refresh_section
 
 def menu_page(root):
 
+    root.clear_frame()
+    root.update()
+
     title = ctk.CTkLabel(root, text="BUDGET BUDDY", font=("Arial", 36), text_color=COLOR_TEXT_LIGHT)
     title.place(relx=0.5, rely=0.1, anchor='center')
 
