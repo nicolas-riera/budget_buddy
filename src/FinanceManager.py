@@ -1,6 +1,11 @@
 class FinanceManager:
 
     @staticmethod
+    def get_account_balance(root, account_id):
+        query = "SELECT balance FROM account WHERE id = %s"
+        return root.database.run_request(query, (account_id,))[0][0]
+
+    @staticmethod
     def get_transactions(root, account_id):
         query = "SELECT description, amount, date, type FROM transactions WHERE id_account = %s ORDER BY date DESC"
         return root.database.run_request(query, (account_id,))

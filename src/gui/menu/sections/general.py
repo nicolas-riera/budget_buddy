@@ -2,12 +2,13 @@ import customtkinter as ctk
 import tkinter as tk
 
 from src.gui.color_palette import *
+from src.FinanceManager import FinanceManager
 
-def render_general(root, frame, balance, account_name, account_id, all_transactions):
+def render_general(root, frame):
     for widget in frame.winfo_children():
         widget.destroy()
 
-    # ── chart building logic (mock aid only) ──────────────
+    # ── chart building logic ───────────────────────────────────────────────
     def _compute_chart(txs):
         if not txs:
             return [("N/A", 0, 0)]
@@ -16,8 +17,7 @@ def render_general(root, frame, balance, account_name, account_id, all_transacti
         for tx in txs:
             amt_str = tx[1]
             date = tx[3]
-            val_str = amt_str.replace("€", "").replace(",", "").replace("+", "").replace(" ", "")
-            val = float(val_str)
+            val = float(amt_str)
             if val < 0:
                 data[date]["exp"] += abs(val)
             else:
@@ -25,6 +25,14 @@ def render_general(root, frame, balance, account_name, account_id, all_transacti
                 
         sorted_dates = sorted(data.keys())[-7:]
         return [("/".join(d.split("/")[:2]) if "/" in d else d, data[d]["exp"], data[d]["inc"]) for d in sorted_dates]
+
+    for enum, acc in enumerate(FinanceManager.get_user_accounts(root)):
+
+        if enum == root.account_active_id:
+            active_acc_id = acc[0]
+            active_acc_enum = enum + 1
+
+    all_transactions = FinanceManager.get_transactions(root, active_acc_id)
 
     chart_data = _compute_chart(all_transactions)
     recent_transactions = all_transactions[:7]
@@ -34,10 +42,11 @@ def render_general(root, frame, balance, account_name, account_id, all_transacti
     frame.columnconfigure(0, weight=1)
     frame.columnconfigure(1, weight=1)
 
+    balance = FinanceManager.get_account_balance(root, active_acc_id)
+
     # Overdraft Detection
-    val_str = balance.replace("€", "").replace(",", "").replace("+", "").replace(" ", "")
     try:
-        bal_val = float(val_str)
+        bal_val = float(balance)
     except:
         bal_val = 0.0
 
@@ -64,8 +73,8 @@ def render_general(root, frame, balance, account_name, account_id, all_transacti
                  font=("Arial", 13, "bold"), text_color=COLOR_TEXT_LIGHT,
                  anchor="w").pack(anchor="w", padx=14, pady=(10, 2))
 
-    ctk.CTkLabel(balance_card, text=balance,
-                 font=("Arial", 26, "bold"), text_color="#C8F0C0" if not has_alert else "#FF9E9E",
+    ctk.CTkLabel(balance_card, text=f"€ {balance}",
+                 font=("Arial", 26, "bold"), text_color="#C8F0C0" if balance > 0 else "#FF9E9E",
                  anchor="w").pack(anchor="w", padx=14, pady=(0, 10))
 
     # ─────────────────────────── TOP-RIGHT : Account ───────────────────────
@@ -77,10 +86,10 @@ def render_general(root, frame, balance, account_name, account_id, all_transacti
                  font=("Arial", 13, "bold"), text_color=COLOR_TEXT_LIGHT,
                  anchor="w").pack(anchor="w", padx=14, pady=(10, 2))
 
-    ctk.CTkLabel(account_card, text=account_name,
+    ctk.CTkLabel(account_card, text=f"Account {active_acc_enum}",
                  font=("Arial", 18, "bold"), text_color="#A8D8FF",
                  anchor="w").pack(anchor="w", padx=14)
-    ctk.CTkLabel(account_card, text=account_id,
+    ctk.CTkLabel(account_card, text=f"N°{active_acc_id}",
                  font=("Arial", 10), text_color=COLOR_TEXT_LIGHT,
                  anchor="w").pack(anchor="w", padx=14, pady=(0, 10))
 
@@ -101,10 +110,17 @@ def render_general(root, frame, balance, account_name, account_id, all_transacti
     scroll.columnconfigure(0, weight=1)
 
     for i, tx in enumerate(recent_transactions):
-        label = tx[0]
+        if tx[0] != "":
+                label = tx[0]
+        else:
+            label = "Unknown"
         amount = tx[1]
-        color = tx[2]
-        date = tx[3]
+        if int(amount) > 0:
+            color = COLOR_AMOUNT_GREEN
+        else:
+            color = COLOR_AMOUNT_RED
+        date = tx[2]
+
         row_frame = ctk.CTkFrame(scroll, fg_color="#6E5B58", corner_radius=8)
         row_frame.grid(row=i, column=0, sticky="ew", padx=4, pady=3)
         row_frame.columnconfigure(1, weight=1)
@@ -113,7 +129,7 @@ def render_general(root, frame, balance, account_name, account_id, all_transacti
                      text_color="#C0B0AE", width=80).grid(row=0, column=0, padx=(8, 4), pady=6)
         ctk.CTkLabel(row_frame, text=label, font=("Arial", 12),
                      text_color=COLOR_TEXT_LIGHT, anchor="w").grid(row=0, column=1, sticky="w", padx=4)
-        ctk.CTkLabel(row_frame, text=amount, font=("Arial", 12, "bold"),
+        ctk.CTkLabel(row_frame, text=f"€ {amount}", font=("Arial", 12, "bold"),
                      text_color=color, anchor="e").grid(row=0, column=2, sticky="e", padx=(4, 10))
 
     # ─────────────────── BOTTOM-RIGHT : Transaction Chart ──────────────────
