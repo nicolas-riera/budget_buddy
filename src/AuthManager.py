@@ -26,10 +26,6 @@ class AuthManager:
     def hash_password(password):
         hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         return hashed
-    
-    @staticmethod
-    def check_email_format(email):
-        return re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", email) is not None
 
     @staticmethod  
     def check_email_in_db(root, email):
@@ -41,19 +37,7 @@ class AuthManager:
             return True
         else:
             return False
-        
-    @staticmethod    
-    def check_password_strengh(password):
-        if len(password) < 10:
-            return False
-        
-        has_upper = re.search(r"[A-Z]", password)
-        has_lower = re.search(r"[a-z]", password)
-        has_digit = re.search(r"\d", password)
-        has_special = re.search(r"[!@#$%^&*(),.?\":{}|<>]", password)
-
-        return all([has_upper, has_lower, has_digit, has_special])
-
+    
     @staticmethod   
     def register_user(root, firstname, lastname, email, password):
         hashed = AuthManager.hash_password(password)

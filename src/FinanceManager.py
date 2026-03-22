@@ -1,13 +1,16 @@
 class FinanceManager:
     @staticmethod
-    def deposit(root, amount):
-        query = "UPDATE transactions SET amount = amount + %s WHERE account_id = %s"
-        root.database.run_request(query, (amount, root.account_id))
+    def deposit(root, amount, account_id, type, description):
+        query_transation = "INSERT INTO transactions (id_account, amount, type, description) VALUES (%s, %s, %s, %s)"
+        query_account = "UPDATE account SET balance = balance + %s WHERE id = %s"
+        
+        root.database.run_request(query_transation, (account_id, amount, type, description))
+        root.database.run_request(query_account, (amount, account_id))
 
     @staticmethod
     def withdraw(root, amount):
         # todo : add overdrown check
-        query = "UPDATE transactions SET amount = amount - %s WHERE account_id = %s"
+        query = ""
         root.database.run_request(query, (amount, root.account_id))
 
     @staticmethod

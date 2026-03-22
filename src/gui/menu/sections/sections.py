@@ -67,7 +67,7 @@ SECTIONS = {
     "General":      lambda root, frame: render_general(root, frame, MOCK_ACCOUNTS[ACTIVE_ACCOUNT_INDEX]["balance"], MOCK_ACCOUNTS[ACTIVE_ACCOUNT_INDEX]["name"], MOCK_ACCOUNTS[ACTIVE_ACCOUNT_INDEX]["number"], MOCK_ACCOUNTS[ACTIVE_ACCOUNT_INDEX]["transactions"]),
     # history gets the entire list of transactions
     "History":      lambda root, frame: render_history(root, frame, MOCK_ACCOUNTS[ACTIVE_ACCOUNT_INDEX]["transactions"]),
-    "Transactions": lambda root, frame: render_transactions(root, frame, MOCK_ACCOUNTS, ACTIVE_ACCOUNT_INDEX),
+    "Transactions": lambda root, frame: render_transactions(root, frame),
     "Accounts":     lambda root, frame: render_accounts(root, frame),
     "Settings":     lambda root, frame: render_settings(root, frame),
 }

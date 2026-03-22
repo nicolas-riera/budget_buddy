@@ -1,10 +1,23 @@
 import customtkinter as ctk
+import re
 
 from src.AuthManager import AuthManager
 
 from src.gui.color_palette import COLOR_HOVER, COLOR_TEXT_LIGHT, COLOR_BUTTON_BG, COLOR_BUTTON_TEXT, COLOR_BG_LEFT, COLOR_BG_RIGHT, PLACEHOLDER_TEXT_COLOR, COLOR_RED
 
 def register_page(root):
+
+    def check_password_strengh(password):
+        if len(password) < 10:
+            return False
+        
+        has_upper = re.search(r"[A-Z]", password)
+        has_lower = re.search(r"[a-z]", password)
+        has_digit = re.search(r"\d", password)
+        has_special = re.search(r"[!@#$%^&*(),.?\":{}|<>]", password)
+
+        return all([has_upper, has_lower, has_digit, has_special])
+
 
     def handle_register():
 
@@ -20,9 +33,9 @@ def register_page(root):
             error_label.configure(text="Please fill out all the informations.")
         elif pwd != pwd_confirm:
             error_label.configure(text="Passwords do not match.")
-        elif not AuthManager.check_password_strengh(pwd):
+        elif not check_password_strengh(pwd):
             error_label.configure(text="Password is not secure enough.\nIt must contain at least 10 characters, one uppercase letter,\none lowercase letter one number and one special character.")
-        elif not AuthManager.check_email_format(email):
+        elif not re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", email) is not None:
             error_label.configure(text="Email is invalid.")
         elif AuthManager.check_email_in_db(root, email):
             error_label.configure(text="Email already exists, please use another one.")

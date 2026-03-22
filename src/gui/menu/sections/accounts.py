@@ -9,10 +9,6 @@ def render_accounts(root, frame):
     def set_active(root, id):
         root.account_active_id = id
 
-    # Create the attribut if it doesn't exist
-    if not hasattr(root, "account_active_id"):
-        root.account_active_id = 0
-
     for widget in frame.winfo_children():
         widget.destroy()
 
