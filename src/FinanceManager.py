@@ -25,7 +25,8 @@ class FinanceManager:
 
         root.database.run_request(query_transation, (account_id, amount, type, description))
         root.database.run_request(query_account, (amount, account_id))
-
+        
+    #For future improvements
     @staticmethod
     def check_account_can_overdrawn(root, account_id):
         query = "SELECT can_overdrawn FROM account WHERE id = %s"

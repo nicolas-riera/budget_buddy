@@ -30,14 +30,6 @@ class DatabaseManager:
         except mysql.connector.Error as error :
             print("DB Error: ", error)
 
-    def desc_tables(self):
-        data = "DESC ACCOUNT"
-        return data
-    
-    def get_user(self):
-        rqst = "SELECT id_user FROM account WHERE id = %s" #%s is a placeholder
-        return self.run_request(rqst, (0,))
-
     def close_db(self):
         self.cursor.close()
         self.db_connect.close()
