@@ -67,8 +67,14 @@ class FinanceManager:
 
     @staticmethod
     def delete_account(root, id):
-        query = "DELETE FROM account WHERE id=%s"
-        root.database.run_request(query, (id,))
+        query_transactions = "DELETE FROM transactions WHERE id_account=%s"
+        query_account = "DELETE FROM account WHERE id=%s"
+
+        root.database.run_request(query_transactions, (id,))
+        root.database.run_request(query_account, (id,))
+
+        if FinanceManager.get_user_accounts_count(root) == 0:
+            FinanceManager.create_account(root)
 
     @staticmethod
     def get_user_name(root):
