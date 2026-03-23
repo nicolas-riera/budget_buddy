@@ -97,6 +97,9 @@ class FinanceManager:
 
     @staticmethod
     def delete_user(root):
-        query = "DELETE FROM users WHERE id=%s"
-        root.database.run_request(query, (root.account_id,))
+        query_account = "UPDATE account SET id_user = -1 WHERE id_user = %s"
+        query_user = "DELETE FROM users WHERE id=%s"
+
+        root.database.run_request(query_account (root.account_id,))
+        root.database.run_request(query_user, (root.account_id,))
         FinanceManager.disconnect_user(root)
