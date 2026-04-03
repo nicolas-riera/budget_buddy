@@ -69,7 +69,90 @@ python main.py
 ![screenshot_login](/docs/screenshots/screenshot_login.png)
 ![screenshot_history](/docs/screenshots/screenshot_history.png)
 ![screenshot_accounts](/docs/screenshots/screenshot_accounts.png)
+## Architecure
+```mermaid
+classDiagram
+    %% ==========================================
+    %% ENTITÉS DE LA BASE DE DONNÉES
+    %% ==========================================
+    
+    class User {
+        +int id
+        +varchar lastname
+        +varchar firstname
+        +varchar email
+        +varchar password
+        +datetime creation_date
+    }
 
+    class Account {
+        +int id
+        +int id_user
+        +float balance
+        +datetime creation_date
+        +boolean can_overdrawn
+    }
+
+    class Transaction {
+        +int id
+        +int id_account
+        +float amount
+        +enum type
+        +datetime date
+        +varchar description
+    }
+
+    %% Relations entre les tables de la base de données
+    User "1" -- "*" Account : possède
+    Account "1" -- "*" Transaction : contient
+
+
+    %% ==========================================
+    %% CLASSES PYTHON DE L'APPLICATION
+    %% ==========================================
+    
+    class BBApp {
+        +int account_id
+        +int account_active_id
+        +DatabaseManager database
+        +clear_frame()
+        +show_page(page_name)
+    }
+
+    class DatabaseManager {
+        +Connection db_connect
+        +Cursor cursor
+        +boolean successful_connection
+        +string connection_error
+        +run_request(request, data)
+        +close_db()
+    }
+
+    class AuthManager {
+        <<static>>
+        +login_user(root, email, password)
+        +hash_password(password)
+        +check_email_in_db(root, email)
+        +register_user(root, firstname, lastname, email, password)
+    }
+
+    class FinanceManager {
+        <<static>>
+        +get_account_balance(root, account_id)
+        +get_transactions(root, account_id)
+        +deposit(root, amount, account_id, type, description)
+        +withdraw(root, amount, account_id, type, description)
+        +check_balance(root, account_id, amount)
+        +create_account(root)
+        +delete_account(root, id)
+        +get_user_accounts(root)
+    }
+
+    %% Relations et dépendances des classes Python
+    BBApp *-- DatabaseManager : instancie
+    BBApp ..> AuthManager : utilise
+    BBApp ..> FinanceManager : utilise
+```
 ## Physical Data Model (PDM)
 
 ![PDM](/docs/db/PDM.png)
